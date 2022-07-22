@@ -1,0 +1,16 @@
+{
+  "name": "Twap-Subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Richa-iitr/Twap-Subgraph",
+    "create-local": "graph create --node http://localhost:8020/ Richa-iitr/Twap-Subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ Richa-iitr/Twap-Subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Richa-iitr/Twap-Subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.30.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  }
+}
