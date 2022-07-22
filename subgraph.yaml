@@ -1,9 +1,9 @@
-specVersion: 0.0.1
+specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: undefined
+    name: Factory
     network: mainnet
     source:
       address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"
@@ -13,17 +13,11 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - FeeAmountEnabled
-        - OwnerChanged
-        - PoolCreated
+        - Pool
       abis:
         - name: UniswapV3Factory
           file: ./abis/UniswapV3Factory.json
       eventHandlers:
-        - event: FeeAmountEnabled(indexed uint24,indexed int24)
-          handler: handleFeeAmountEnabled
-        - event: OwnerChanged(indexed address,indexed address)
-          handler: handleOwnerChanged
         - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
           handler: handlePoolCreated
       file: ./src/uniswap-v-3-factory.ts

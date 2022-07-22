@@ -1,6 +1,8 @@
-type ExampleEntity @entity {
+type Pool @entity {
   id: ID!
   count: BigInt!
-  fee: Int! # uint24
-  tickSpacing: Int! # int24
+  address: Bytes!
+  token0: Bytes!
+  token1: Bytes!
+  tickSpacing: BigInt!
 }
