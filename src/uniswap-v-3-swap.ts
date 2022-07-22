@@ -29,15 +29,15 @@ export function handleSwap(event: Swap): void {
   swapData.liquidity = event.params.liquidity;
   swapData.timestamp = event.block.timestamp;
 
-  if (swaps.length == 0) {
-    swapData.cumulativeTicks = BigInt.fromI32(0);
-  } else {
-    let prevSwap = createOrLoadSwapData(swaps[swaps.length - 1]);
-    let prevTickTime = prevSwap.timestamp;
-    let duration = event.block.timestamp.minus(prevTickTime);
-    let prevTick = prevSwap.tick;
-    swapData.cumulativeTicks = prevTick.times(duration);
-  }
+//   if (swaps.length == 0) {
+//     swapData.cumulativeTicks = BigInt.fromI32(0);
+//   } else {
+//     let prevSwap = createOrLoadSwapData(swaps[swaps.length - 1]);
+//     let prevTickTime = prevSwap.timestamp;
+//     let duration = event.block.timestamp.minus(prevTickTime);
+//     let prevTick = prevSwap.tick;
+//     swapData.cumulativeTicks = prevTick.times(duration);
+//   }
 
   swaps.push(swapData.id);
   pool.count = pool.count.plus(BigInt.fromI32(1));

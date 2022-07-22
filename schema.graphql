@@ -16,7 +16,7 @@ type SwapData @entity {
   origin: Bytes!
   sqrtPriceX96: BigInt!
   tick: BigInt!
-  cumulativeTicks: BigInt!
+  # cumulativeTicks: BigInt!
   timestamp: BigInt!
   liquidity: BigInt!
   pool: [Pool!]! @derivedFrom(field: "swap")
