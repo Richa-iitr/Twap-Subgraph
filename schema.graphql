@@ -1,6 +1,23 @@
-type ExampleEntity @entity {
+type Pool @entity {
   id: ID!
   count: BigInt!
-  fee: Int! # uint24
-  tickSpacing: Int! # int24
+  address: Bytes!
+  token0: Bytes!
+  token1: Bytes!
+  feeTier: Int!
+  tickSpacing: Int!
+  swap: [SwapData!]! @derivedFrom(field: "pool")
+}
+
+type SwapData @entity {
+  id: ID!
+  sender: Bytes!
+  receiver: Bytes!
+  origin: Bytes!
+  sqrtPriceX96: BigInt!
+  tick: BigInt!
+  cumulativeTicks: BigInt!
+  timestamp: BigInt!
+  liquidity: BigInt!
+  pool: Pool!
 }

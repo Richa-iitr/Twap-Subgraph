@@ -1,58 +1,54 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { Address, BigInt, DataSourceContext } from "@graphprotocol/graph-ts";
 import {
   UniswapV3Factory,
-  FeeAmountEnabled,
-  OwnerChanged,
-  PoolCreated
-} from "../generated/UniswapV3Factory/UniswapV3Factory"
-import { ExampleEntity } from "../generated/schema"
+  PoolCreated,
+} from "../generated/Factory/UniswapV3Factory";
+import { UniswapV3Pool } from "../generated/templates";
+import { Pool, SwapData } from "../generated/schema";
 
-export function handleFeeAmountEnabled(event: FeeAmountEnabled): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+export function handlePoolCreated(event: PoolCreated): void {
+  let context = new DataSourceContext();
+  context.setString("pool", event.params.pool.toHexString());
+  UniswapV3Pool.createWithContext(event.params.pool, context);
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+  let pool = createOrLoadPool(event.params.pool.toHexString());
+  pool.token0 = event.params.token0;
+  pool.token1 = event.params.token1;
+  pool.address = event.params.pool;
+  pool.feeTier = event.params.fee;
+  pool.tickSpacing = event.params.tickSpacing;
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.fee = event.params.fee
-  entity.tickSpacing = event.params.tickSpacing
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.createPool(...)
-  // - contract.feeAmountTickSpacing(...)
-  // - contract.getPool(...)
-  // - contract.owner(...)
-  // - contract.parameters(...)
+  pool.save();
 }
 
-export function handleOwnerChanged(event: OwnerChanged): void {}
+export function createOrLoadPool(id: string): Pool {
+  let pool = Pool.load(id);
+  if (pool == null) {
+    pool = new Pool(id);
+    pool.count = BigInt.fromI32(0);
+    pool.address = new Address(0);
+    pool.token0 = new Address(0);
+    pool.token1 = new Address(0);
+    pool.feeTier = 0;
+    pool.tickSpacing = 0;
+  }
+  pool.count = pool.count.plus(BigInt.fromI32(1));
+  return pool;
+}
 
-export function handlePoolCreated(event: PoolCreated): void {}
+export function createOrLoadSwapData(id: string): SwapData {
+  let data = SwapData.load(id);
+  if (data == null) {
+    data = new SwapData(id);
+    data.cumulativeTicks = BigInt.fromI32(0);
+    data.sender = new Address(0);
+    data.receiver = new Address(0);
+    data.origin = new Address(0);
+    data.sqrtPriceX96 = BigInt.fromI32(0);
+    data.tick = BigInt.fromI32(0);
+    data.cumulativeTicks = BigInt.fromI32(0);
+    data.timestamp = BigInt.fromI32(0);
+    data.liquidity = BigInt.fromI32(0);
+  }
+  return data;
+}
