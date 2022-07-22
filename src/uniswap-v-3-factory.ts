@@ -9,7 +9,6 @@ import { Pool, SwapData } from "../generated/schema";
 export function handlePoolCreated(event: PoolCreated): void {
   let context = new DataSourceContext();
   context.setString("pool", event.params.pool.toHexString());
-  UniswapV3Pool.createWithContext(event.params.pool, context);
 
   let pool = createOrLoadPool(event.params.pool.toHexString());
   pool.token0 = event.params.token0;
@@ -18,6 +17,7 @@ export function handlePoolCreated(event: PoolCreated): void {
   pool.feeTier = event.params.fee;
   pool.tickSpacing = event.params.tickSpacing;
 
+  UniswapV3Pool.createWithContext(event.params.pool, context);
   pool.save();
 }
 
@@ -31,8 +31,8 @@ export function createOrLoadPool(id: string): Pool {
     pool.token1 = new Address(0);
     pool.feeTier = 0;
     pool.tickSpacing = 0;
+    pool.swap = new Array();
   }
-  pool.count = pool.count.plus(BigInt.fromI32(1));
   return pool;
 }
 

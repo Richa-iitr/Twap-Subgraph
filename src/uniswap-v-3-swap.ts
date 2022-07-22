@@ -20,7 +20,7 @@ export function handleSwap(event: Swap): void {
 
   let swaps = pool.swap;
 
-  swapData.pool = poolId;
+  //   swapData.pool = poolId;
   swapData.sender = event.params.sender;
   swapData.receiver = event.params.recipient;
   swapData.origin = event.transaction.from;
@@ -38,6 +38,11 @@ export function handleSwap(event: Swap): void {
     let prevTick = prevSwap.tick;
     swapData.cumulativeTicks = prevTick.times(duration);
   }
+
+  swaps.push(swapData.id);
+  pool.count = pool.count.plus(BigInt.fromI32(1));
+  pool.swap = swaps;
+
   swapData.save();
   pool.save();
 }
