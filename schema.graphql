@@ -6,6 +6,7 @@ type Pool @entity {
   token1: Bytes!
   feeTier: Int!
   tickSpacing: Int!
+  createdAt: BigInt!
   swap: [SwapData!]! 
 }
 
@@ -16,8 +17,10 @@ type SwapData @entity {
   origin: Bytes!
   sqrtPriceX96: BigInt!
   tick: BigInt!
-  # cumulativeTicks: BigInt!
+  cumulativeTicks: BigInt!
   timestamp: BigInt!
+  blockNumber: BigInt!
   liquidity: BigInt!
-  pool: [Pool!]! @derivedFrom(field: "swap")
+  # pool: [Pool!]! @derivedFrom(field: "swap")
 }
+

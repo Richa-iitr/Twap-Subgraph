@@ -16,6 +16,7 @@ export function handlePoolCreated(event: PoolCreated): void {
   pool.address = event.params.pool;
   pool.feeTier = event.params.fee;
   pool.tickSpacing = event.params.tickSpacing;
+  pool.createdAt = event.block.timestamp;
 
   UniswapV3Pool.createWithContext(event.params.pool, context);
   pool.save();
@@ -31,6 +32,7 @@ export function createOrLoadPool(id: string): Pool {
     pool.token1 = new Address(0);
     pool.feeTier = 0;
     pool.tickSpacing = 0;
+    pool.createdAt = BigInt.fromI32(0);
     pool.swap = new Array();
   }
   return pool;
@@ -45,8 +47,9 @@ export function createOrLoadSwapData(id: string): SwapData {
     data.origin = new Address(0);
     data.sqrtPriceX96 = BigInt.fromI32(0);
     data.tick = BigInt.fromI32(0);
-    // data.cumulativeTicks = BigInt.fromI32(0);
+    data.cumulativeTicks = BigInt.fromI32(0);
     data.timestamp = BigInt.fromI32(0);
+    data.blockNumber = BigInt.fromI32(0);
     data.liquidity = BigInt.fromI32(0);
   }
   return data;
