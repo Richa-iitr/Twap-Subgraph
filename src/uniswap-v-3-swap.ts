@@ -31,6 +31,7 @@ export function handleSwap(event: Swap): void {
   swapData.timestamp = event.block.timestamp;
   swapData.blockNumber = event.block.number;
 
+    //cumulative ticks -- stores the cumulative tick data of previous timestamp.
     if (swaps.length == 0) {
       swapData.cumulativeTicks = BigInt.fromI32(0);
     } else {
